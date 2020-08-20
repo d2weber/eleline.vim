@@ -91,12 +91,11 @@ function! ElelineGitBranch(...) abort
   if s:is_tmp_file() | return '' | endif
   let reload = get(a:, 1, 0) == 1
   if exists('b:eleline_branch') && !reload | return b:eleline_branch | endif
-  if !exists('*FugitiveExtractGitDir') | return '' | endif
-  let dir = exists('b:git_dir') ? b:git_dir : FugitiveExtractGitDir(resolve(expand('%:p')))
-  if empty(dir) | return '' | endif
-  let b:git_dir = dir
+  if !exists('*FugitiveWorkTree') | return '' | endif
+  let root = exists('b:git_root') ? b:git_root : FugitiveWorkTree()
+  if empty(root) | return '' | endif
+  let b:git_root = root
   let roots = values(s:jobs)
-  let root = fnamemodify(dir, ':h')
   if index(roots, root) >= 0 | return '' | endif
 
   if exists('*job_start')
